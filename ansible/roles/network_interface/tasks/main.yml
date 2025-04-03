@@ -1,0 +1,25 @@
+---
+- name: Get Subnet ID
+  azure_rm_subnet_info:
+    resource_group: "{{ resource_group_name }}"
+    virtual_network: "{{ virtual_network_name }}"
+    name: "{{ subnet_name }}"
+  register: subnet_info
+
+- name: Get Network Security Group ID
+  azure_rm_securitygroup_info:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ network_security_group_name }}"
+  register: nsg_info
+
+- name: Create Network Interface
+  azure_rm_networkinterface:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ network_interface_name }}"
+    location: "{{ location }}"
+    virtual_network: "{{ virtual_network_name }}"
+    subnet: "{{ subnet_name }}"
+    private_ip_allocation_method: "{{ private_ip_address_allocation }}"
+    public_ip_name: "{{ public_ip_name }}"
+    security_group: "{{ network_security_group_name }}"
+  register: nic_result

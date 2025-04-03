@@ -1,0 +1,23 @@
+---
+- name: Get Network Security Group Details
+  azure_rm_securitygroup_info:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ network_security_group_name }}"
+  register: nsg_info
+
+- name: Create Network Security Group if it does not exist
+  azure_rm_securitygroup:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ network_security_group_name }}"
+    location: "{{ location }}"
+    rules:
+      - name: AllowSSH
+        protocol: Tcp
+        source_port_range: "*"
+        destination_port_range: "22"
+        access: Allow
+        direction: Inbound
+        priority: 100
+        source_address_prefix: "*"
+        destination_address_prefix: "*"
+  when: nsg_info.securitygroups | length == 0

@@ -1,0 +1,15 @@
+---
+- name: Get Subnet Details
+  azure_rm_subnet_info:
+    resource_group: "{{ resource_group_name }}"
+    virtual_network: "{{ virtual_network_name }}"
+    name: "{{ subnet_name }}"
+  register: subnet_info
+
+- name: Create Subnet if it does not exist
+  azure_rm_subnet:
+    resource_group: "{{ resource_group_name }}"
+    virtual_network: "{{ virtual_network_name }}"
+    name: "{{ subnet_name }}"
+    address_prefix: "{{ subnet_address_prefixes[0] }}"
+  when: subnet_info.subnets | length == 0

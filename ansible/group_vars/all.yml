@@ -1,0 +1,26 @@
+---
+subscription_id: "d5b7ad7b-499c-4072-83dd-86217ad832dd" # Replace with your Azure subscription ID
+resource_group_name: "playground-resources"
+virtual_network_name: "playground-vnet"
+vnet_address_space: ["10.0.0.0/16"]
+subnet_name: "default"
+subnet_address_prefixes: ["10.0.1.0/24"]
+network_security_group_name: "playground-nsg"
+public_ip_name: "playground-public-ip"
+public_ip_allocation_method: "Dynamic"
+public_ip_sku: "Basic"
+network_interface_name: "playground-nic"
+private_ip_address_allocation: "Dynamic"
+vm_name: "playground-vm"
+vm_size: "Standard_B2s"
+os_disk_storage_account_type: "Standard_LRS"
+os_disk_size_gb: 64
+os_image_publisher: "RedHat"
+os_image_offer: "RHEL"
+os_image_sku: "8-gen2"
+os_image_version: "latest"
+vm_computer_name: "playground-vm"
+admin_username: "azureuser"
+disable_password_authentication: true
+admin_ssh_public_key_path: "~/.ssh/id_rsa.pub"
+location: "eastus" # You may need to change this to your preferred location

@@ -1,0 +1,26 @@
+---
+- name: Deploy Azure VM Infrastructure
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars_files:
+    - ../group_vars/all.yml
+  tasks:
+    - name: Include Virtual Network Role
+      include_role:
+        name: virtual_network
+    - name: Include Subnet Role
+      include_role:
+        name: subnet
+    - name: Include Network Security Group Role
+      include_role:
+        name: network_security_group
+    - name: Include Public IP Role
+      include_role:
+        name: public_ip
+    - name: Include Network Interface Role
+      include_role:
+        name: network_interface
+    - name: Include Virtual Machine Role
+      include_role:
+        name: virtual_machine

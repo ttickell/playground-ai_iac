@@ -1,0 +1,9 @@
+---
+- name: Create Public IP Address
+  azure_rm_publicipaddress:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ public_ip_name }}"
+    allocation_method: "{{ public_ip_allocation_method }}"
+    sku: "{{ public_ip_sku }}"
+    location: "{{ location }}"
+  register: public_ip_result

@@ -1,0 +1,14 @@
+---
+- name: Get Virtual Network Details
+  azure_rm_virtualnetwork_info:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ virtual_network_name }}"
+  register: vnet_info
+
+- name: Create Virtual Network if it does not exist
+  azure_rm_virtualnetwork:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ virtual_network_name }}"
+    location: "{{ location }}"
+    address_prefixes: "{{ vnet_address_space }}"
+  when: vnet_info.virtualnetworks | length == 0

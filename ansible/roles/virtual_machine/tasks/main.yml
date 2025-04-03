@@ -1,0 +1,43 @@
+---
+- name: Get Network Interface ID
+  azure_rm_networkinterface_info:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ network_interface_name }}"
+  register: nic_info
+
+- name: Create Linux Virtual Machine
+  azure_rm_virtualmachine:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ vm_name }}"
+    location: "{{ location }}"
+    vm_size: "{{ vm_size }}"
+    admin_username: "{{ admin_username }}"
+    disable_password_authentication: "{{ disable_password_authentication }}"
+    ssh_public_keys:
+      - path: "/home/{{ admin_username }}/.ssh/authorized_keys"
+        key_data: "{{ lookup('file', admin_ssh_public_key_path) }}"
+    network_interfaces:
+      - "{{ nic_info.networkinterfaces[0].id }}"
+    os_disk:
+      caching: ReadWrite
+      managed_disk_type: "{{ os_disk_storage_account_type }}"
+      disk_size_gb: "{{ os_disk_size_gb }}"
+    image:
+      publisher: "{{ os_image_publisher }}"
+      offer: "{{ os_image_offer }}"
+      sku: "{{ os_image_sku }}"
+      version: "{{ os_image_version }}"
+  register: vm_result
+
+- name: Output Public IP Address
+  debug:
+    msg: "Public IP Address: {{ public_ip_result.state.ip_address }}"
+  when: public_ip_result.state.ip_address is defined
+
+- name: Output VM ID
+  debug:
+    msg: "VM ID: {{ vm_result.state.id }}"
+
+- name: Output Private IP Address
+  debug:
+    msg: "Private IP Address: {{ vm_result.state.private_ip_address }}"
